@@ -48,6 +48,10 @@ Vital Plugin-loader
    objects can be added to the plugin loader at run time to select or
    exclude specific plugins.
 
+ * Added optional bit mask to load_all_plugins() which allows selected
+   groups of plugins to be loaded. In addition the build/install
+   directory structure for the plugins was reorganized.
+
 Vital Util
 
 Vital Logger
