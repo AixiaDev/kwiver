@@ -184,15 +184,11 @@ int main(int argc, char *argv[])
   // Global shared context
   // Allocated on the stack so it will automatically clean up
   //
-  using kvpf = kwiver::vital::plugin_factory;
-
   applet_context_t tool_context = std::make_shared< kwiver::tools::applet_context >();
 
   kwiver::vital::plugin_manager& vpm = kwiver::vital::plugin_manager::instance();
   const std::string exec_path = kwiver::vital::get_executable_path();
-  vpm.add_search_path(exec_path + "/../lib/kwiver/modules");
-  vpm.add_search_path(exec_path + "/../lib/kwiver/modules/applets");
-  vpm.add_search_path(exec_path + "/../lib/kwiver/processes");
+  vpm.add_search_path(exec_path + "/../lib/kwiver/plugins");
 
   // remove all default plugin filters
   vpm.get_loader()->clear_filters();
