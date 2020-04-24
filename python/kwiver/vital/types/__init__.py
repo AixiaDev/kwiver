@@ -23,6 +23,7 @@ from kwiver.vital.types.geo_MGRS import *
 from kwiver.vital.types.geo_point import *
 from kwiver.vital.types.geo_polygon import *
 from kwiver.vital.types.homography import *
+from kwiver.vital.types.homography_f2w import *
 from kwiver.vital.types.iqr_feedback import *
 from kwiver.vital.types.landmark import *
 from kwiver.vital.types.local_cartesian import *

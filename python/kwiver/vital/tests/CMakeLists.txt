@@ -23,6 +23,7 @@ set(__testable_modnames
   test_geo_polygon
   test_geodesy
   test_homography
+  test_homography_f2w
   test_image
   test_image_container
   test_iqr_feedback

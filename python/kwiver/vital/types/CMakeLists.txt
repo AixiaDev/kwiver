@@ -190,6 +190,13 @@ target_link_libraries(python-vital.types-homography_f2f
   PUBLIC ${PYTHON_LIBRARIES}
          vital)
 
+kwiver_add_python_library(homography_f2w
+  vital/types
+  homography_f2w.cxx)
+target_link_libraries(python-vital.types-homography_f2w
+  PUBLIC ${PYTHON_LIBRARIES}
+         vital)
+
 kwiver_add_python_library(iqr_feedback
   vital/types
   iqr_feedback.cxx)
@@ -326,6 +333,7 @@ if(NOT SKBUILD)
     geo_polygon
     geo_point
     homography
+    homography_f2w
     iqr_feedback
     landmark
     local_cartesian
