@@ -35,7 +35,7 @@
 namespace py=pybind11;
 namespace kv=kwiver::vital;
 
-PYBIND11_MODULE(homography_f2w, m)
+PYBIND11_MODULE( homography_f2w, m )
 {
   py::class_< kv::f2w_homography, std::shared_ptr< kv::f2w_homography > >( m, "F2WHomography" )
   .def( py::init< kv::frame_id_t const >() )
@@ -43,17 +43,17 @@ PYBIND11_MODULE(homography_f2w, m)
   .def( py::init< kv::f2w_homography const& >() )
   .def_property_readonly( "homography", &kv::f2w_homography::homography )
   .def_property_readonly( "frame_id", &kv::f2w_homography::frame_id )
-  .def("get",
-   [] (kv::f2w_homography const& self, int r, int c)
+  .def( "get",
+   [] ( kv::f2w_homography const& self, int r, int c )
    {
      auto m = self.homography()->matrix();
-     if(0 <= r && r < m.rows() && 0 <= c && c < m.cols())
+     if( 0 <= r && r < m.rows() && 0 <= c && c < m.cols() )
      {
-       return m(r, c);
+       return m( r, c );
      }
-     throw std::out_of_range("Tried to perform get() out of bounds");
+     throw std::out_of_range( "Tried to perform get() out of bounds" );
    },
    "Convenience method that returns the underlying coefficient"
-   " at the given row and column")
+   " at the given row and column" )
   ;
 }
