@@ -141,6 +141,13 @@ target_link_libraries(python-vital.types-feature_set
   PUBLIC ${PYTHON_LIBRARIES}
          vital)
 
+kwiver_add_python_library(fundamental_matrix
+  vital/types
+  fundamental_matrix.cxx)
+target_link_libraries(python-vital.types-fundamental_matrix
+  PUBLIC ${PYTHON_LIBRARIES}
+         vital)
+
 kwiver_add_python_library(geodesy
   vital/types
   geodesy.cxx)
@@ -327,6 +334,7 @@ if(NOT SKBUILD)
     detected_object_set
     feature
     feature_set
+    fundamental_matrix
     geodesy
     geo_covariance
     geo_MGRS

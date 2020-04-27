@@ -17,6 +17,7 @@ set(__testable_modnames
   test_descriptor_set
   test_feature
   test_feature_set
+  test_fundamental_matrix
   test_geo_covariance
   test_geo_MGRS
   test_geo_point
