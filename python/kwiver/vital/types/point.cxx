@@ -55,16 +55,16 @@ void declare_point( py::module &m, std::string const& typestr )
               std::shared_ptr< Class > > p( m, pyclass_name.c_str() );
   p.def( py::init<>() );
   p.def( py::init< vector_type const&, covariance_type const& >() );
-  p.def( "__str__", [] ( const Class& self )
+  p.def( "__str__", [] ( Class const& self )
   {
     std::stringstream s;
     s << self;
-    return (s.str());
+    return ( s.str() );
   });
 
   p.def_property( "value",      &Class::value,      &Class::set_value );
   p.def_property( "covariance", &Class::covariance, &Class::set_covariance );
-  p.def_property_readonly( "type_name", [&typestr] ()
+  p.def_property_readonly( "type_name", [ typestr ] ( Class const& self )
   {
     return typestr;
   });
@@ -72,11 +72,11 @@ void declare_point( py::module &m, std::string const& typestr )
 
 PYBIND11_MODULE( point, m )
 {
-  declare_point< 2, int >( m, "2i" );
+  declare_point< 2, int >   ( m, "2i" );
   declare_point< 2, double >( m, "2d" );
-  declare_point< 2, float >( m, "2f" );
+  declare_point< 2, float > ( m, "2f" );
   declare_point< 3, double >( m, "3d" );
-  declare_point< 3, float >( m, "3f" );
+  declare_point< 3, float > ( m, "3f" );
   declare_point< 4, double >( m, "4d" );
-  declare_point< 4, float >( m, "4f" );
+  declare_point< 4, float > ( m, "4f" );
 }

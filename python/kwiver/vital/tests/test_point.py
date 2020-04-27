@@ -51,28 +51,64 @@ class TestVitalPoint(object):
         Point4d()
         Point4f()
 
+    def test_type_name_def_ctor(self):
+        pts = [
+            Point2i(),
+            Point2d(),
+            Point2f(),
+            Point3d(),
+            Point3f(),
+            Point4d(),
+            Point4f(),
+        ]
+        expected_types = ["2i", "2d", "2f", "3d", "3f", "4d", "4f"]
+
+        for pt, t in zip(pts, expected_types):
+            nt.assert_equals(pt.type_name, t)
+
+    def test_type_name_nondef_ctor(self):
+        loc2_int = np.random.randint(low=-10, high=10, size=2)
+        loc2 = np.random.uniform(low=-10, high=10, size=2)
+        loc3 = np.random.uniform(low=-10, high=10, size=3)
+        loc4 = np.random.uniform(low=-10, high=10, size=4)
+        cov2, cov3, cov4 = Covar2f(), Covar3f(), Covar4f()
+
+        pts = [
+            Point2i(loc2_int, cov2),
+            Point2d(loc2, cov2),
+            Point2f(loc2, cov2),
+            Point3d(loc3, cov3),
+            Point3f(loc3, cov3),
+            Point4d(loc4, cov4),
+            Point4f(loc4, cov4),
+        ]
+        expected_types = ["2i", "2d", "2f", "3d", "3f", "4d", "4f"]
+
+        for pt, t in zip(pts, expected_types):
+            nt.assert_equals(pt.type_name, t)
+
     def test_non_default_constructors(self):
-        pt = np.array([-5, 10])
-        Point2i(pt, Covar2f())
-        Point2i(pt, Covar2f(20))
+        vector_init = np.array([-5, 10])
+        Point2i(vector_init, Covar2f())
+        Point2i(vector_init, Covar2f(20))
 
-        pt = np.random.uniform(low=-10, high=10, size=2)
-        Point2d(pt, Covar2f())
-        Point2f(pt, Covar2f())
-        Point2d(pt, Covar2f(20))
-        Point2f(pt, Covar2f(20))
+        vector_init = np.random.uniform(low=-10, high=10, size=2)
+        Point2d(vector_init, Covar2f())
+        Point2f(vector_init, Covar2f())
+        Point2d(vector_init, Covar2f(20))
+        Point2f(vector_init, Covar2f(20))
 
-        pt = np.random.uniform(low=-10, high=10, size=3)
-        Point3d(pt, Covar3f())
-        Point3f(pt, Covar3f())
-        Point3d(pt, Covar3f(20))
-        Point3f(pt, Covar3f(20))
+        vector_init = np.random.uniform(low=-10, high=10, size=3)
+        Point3d(vector_init, Covar3f())
+        Point3f(vector_init, Covar3f())
+        Point3d(vector_init, Covar3f(20))
+        Point3f(vector_init, Covar3f(20))
 
-        pt = np.random.uniform(low=-10, high=10, size=4)
-        Point4d(pt, Covar4f())
-        Point4f(pt, Covar4f())
-        Point4d(pt, Covar4f(20))
-        Point4f(pt, Covar4f(20))
+        vector_init = np.random.uniform(low=-10, high=10, size=4)
+        Point4d(vector_init, Covar4f())
+        Point4f(vector_init, Covar4f())
+        Point4d(vector_init, Covar4f(20))
+        Point4f(vector_init, Covar4f(20))
 
     def test_initial_value(self):
         np.testing.assert_array_equal(Point2i().value, np.zeros(2))
