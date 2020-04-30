@@ -44,7 +44,7 @@ import os
 from kwiver.vital.types import (
     Camera,
     CameraIntrinsics,
-    Rotation,
+    RotationD,
 )
 
 @pytest.mark.skip(reason="Old binding based tests that are being updated")
@@ -55,7 +55,7 @@ class TestVitalCamera (unittest.TestCase):
         cam = Camera()
 
         c = np.zeros(3)
-        r = Rotation()
+        r = RotationD()
         ci = CameraIntrinsics()
         cam = Camera(c, r, ci)
 
@@ -87,7 +87,7 @@ class TestVitalCamera (unittest.TestCase):
 
     def test_translation_initialized(self):
         center = np.array([1, 2, 3])
-        rotation = Rotation.from_axis_angle([0, 1, 0], math.pi / 2.)
+        rotation = RotationD(math.pi / 2., [0, 1, 0])
         cam = Camera(center, rotation)
         np.testing.assert_array_equal(
             cam.translation,
@@ -112,7 +112,7 @@ class TestVitalCamera (unittest.TestCase):
 
     def test_rotation_initialized(self):
         center = np.array([1, 2, 3])
-        r_expected = Rotation.from_axis_angle([0,1,0], math.pi / 8)
+        r_expected = RotationD(math.pi / 8, [0,1,0])
         cam = Camera(center, r_expected)
         nose.tools.assert_is_not(cam.rotation, r_expected)
         nose.tools.assert_equal(cam.rotation, r_expected)
@@ -145,7 +145,7 @@ class TestVitalCamera (unittest.TestCase):
         nose.tools.assert_equal(cam1, cam2)
 
         center = np.array([1, 2, 3])
-        rotation = Rotation.from_axis_angle([0, 1, 0], math.pi / 2.)
+        rotation = RotationD(math.pi / 2., [0, 1, 0])
         cam1 = Camera(center, rotation)
         cam2 = Camera(center, rotation)
         nose.tools.assert_equal(cam1, cam1)
@@ -160,7 +160,7 @@ class TestVitalCamera (unittest.TestCase):
         nose.tools.assert_equal(cam, cam2)
 
         center = np.array([1, 2, 3])
-        rotation = Rotation.from_axis_angle([0, 1, 0], math.pi / 2.)
+        rotation = RotationD(math.pi / 2., [0, 1, 0])
         cam = Camera(center, rotation)
         cam_s = cam.as_string()
         cam2 = Camera.from_string(cam_s)
@@ -173,7 +173,7 @@ class TestVitalCamera (unittest.TestCase):
         k = CameraIntrinsics(1000, [300, 400])
         center = np.array([3,-4,7])
 
-        base = Camera(center, Rotation(), k)
+        base = Camera(center, RotationD(), k)
         cam = base.clone_look_at(np.array([0,1,2]))
         nose.tools.assert_not_equal(base, cam)
 
@@ -193,7 +193,7 @@ class TestVitalCamera (unittest.TestCase):
         try:
             for _ in range(100):
                 center = (np.random.rand(3)*2-1)*100
-                rotation = Rotation.from_quaternion(np.random.rand(4)*2-1)
+                rotation = RotationD(np.random.rand(4)*2-1)
                 intrinsics = CameraIntrinsics(10, (5, 5), 1.2, 0.5, [4, 5, 6])
                 c1 = Camera(center, rotation,
                             intrinsics)

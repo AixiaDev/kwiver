@@ -34,13 +34,12 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 
-#include "rotation_class.cxx"
-
 namespace py = pybind11;
+namespace kv = kwiver::vital;
 
 bool
-camera_eq(std::shared_ptr<kwiver::vital::simple_camera_perspective> self,
-          std::shared_ptr<kwiver::vital::simple_camera_perspective> other)
+camera_eq(std::shared_ptr<kv::simple_camera_perspective> self,
+          std::shared_ptr<kv::simple_camera_perspective> other)
 {
   return ((self->get_center() - other->get_center()).isMuchSmallerThan(0.001) &&
           (self->get_center_covar().matrix() == other->get_center_covar().matrix()) &&
@@ -48,8 +47,8 @@ camera_eq(std::shared_ptr<kwiver::vital::simple_camera_perspective> self,
 }
 
 bool
-camera_ne(std::shared_ptr<kwiver::vital::simple_camera_perspective> self,
-          std::shared_ptr<kwiver::vital::simple_camera_perspective> other)
+camera_ne(std::shared_ptr<kv::simple_camera_perspective> self,
+          std::shared_ptr<kv::simple_camera_perspective> other)
 {
   return !camera_eq(self, other);
 }
@@ -57,27 +56,26 @@ camera_ne(std::shared_ptr<kwiver::vital::simple_camera_perspective> self,
 PYBIND11_MODULE(camera, m)
 {
 
-  py::class_<kwiver::vital::simple_camera_perspective,
-             std::shared_ptr<kwiver::vital::simple_camera_perspective> >(m, "Camera")
+  py::class_<kv::simple_camera_perspective,
+             std::shared_ptr<kv::simple_camera_perspective> >(m, "Camera")
   .def(py::init<>())
-  .def(py::init([](Eigen::Vector3d& vec)
+  .def(py::init([](kv::vector_3d const& vec)
                   {
                     kwiver::vital::simple_camera_perspective ret_cam(vec, kwiver::vital::rotation_<double>());
                     return ret_cam;
                   }))
-  .def(py::init([](Eigen::Vector3d& vec, PyRotation &rotation)
+  .def(py::init([](kv::vector_3d const& vec, kv::rotation_d const& rotation)
                   {
-                    kwiver::vital::simple_camera_perspective ret_cam(vec, rotation.getRotD());
+                    kwiver::vital::simple_camera_perspective ret_cam(vec, rotation);
                     return ret_cam;
                   }))
-  .def(py::init([](Eigen::Vector3d& vec, PyRotation &rotation, py::object &int_obj)
+  .def(py::init([](kv::vector_3d const& vec, kv::rotation_d const& rotation, kv::simple_camera_intrinsics c_int)
                   {
-                    kwiver::vital::simple_camera_intrinsics c_int = int_obj.cast<kwiver::vital::simple_camera_intrinsics>();
-                    kwiver::vital::simple_camera_perspective ret_cam(vec, rotation.getRotD(), c_int);
+                    kwiver::vital::simple_camera_perspective ret_cam(vec, rotation, c_int);
                     return ret_cam;
                   }))
-  .def("as_matrix", &kwiver::vital::simple_camera_perspective::as_matrix)
-  .def("as_string", [](kwiver::vital::simple_camera_perspective &self)
+  .def("as_matrix", &kv::simple_camera_perspective::as_matrix)
+  .def("as_string", [](kv::simple_camera_perspective &self)
                       {
                         std::ostringstream ss;
                         ss << self;
@@ -85,42 +83,33 @@ PYBIND11_MODULE(camera, m)
                       })
   .def_static("from_string", [](std::string str)
                       {
-                        kwiver::vital::simple_camera_perspective self;
+                        kv::simple_camera_perspective self;
                         std::istringstream ss(str);
                         ss >> self;
                         return self;
                       })
-  .def("clone_look_at", &kwiver::vital::simple_camera_perspective::clone_look_at,
+  .def("clone_look_at", &kv::simple_camera_perspective::clone_look_at,
     py::arg("stare_point"), py::arg("up_direction")=Eigen::Matrix<double,3,1>::UnitZ())
-  .def("project", &kwiver::vital::simple_camera_perspective::project,
+  .def("project", &kv::simple_camera_perspective::project,
     py::arg("pt"))
-  .def("depth", &kwiver::vital::simple_camera_perspective::depth)
-  .def("write_krtd_file", [](kwiver::vital::simple_camera_perspective &self, std::string path)
+  .def("depth", &kv::simple_camera_perspective::depth)
+  .def("write_krtd_file", [](kv::simple_camera_perspective &self, std::string path)
                                 {
-                                  kwiver::vital::write_krtd_file(self, path);
+                                  kv::write_krtd_file(self, path);
                                 })
   .def_static("from_krtd_file", [](std::string path)
                                 {
-                                  kwiver::vital::camera_perspective_sptr c(kwiver::vital::read_krtd_file(path));
+                                  kv::camera_perspective_sptr c(kv::read_krtd_file(path));
                                   return c;
                                 })
-  .def_property("center", &kwiver::vital::simple_camera_perspective::center,
-                          &kwiver::vital::simple_camera_perspective::set_center)
-  .def_property("covariance", &kwiver::vital::simple_camera_perspective::get_center_covar,
-                              &kwiver::vital::simple_camera_perspective::set_center_covar)
-  .def_property("translation", &kwiver::vital::simple_camera_perspective::translation,
-                               &kwiver::vital::simple_camera_perspective::set_translation)
-  .def_property("rotation", [](kwiver::vital::simple_camera_perspective &self)
-                                {
-                                  PyRotation rot;
-                                  rot.setType('d');
-                                  rot.setRotD(self.get_rotation());
-                                  return rot;
-                                },
-                            [](kwiver::vital::simple_camera_perspective &self, PyRotation val)
-                                {
-                                  self.set_rotation(val.getRotD());
-                                })
+  .def_property("center", &kv::simple_camera_perspective::center,
+                          &kv::simple_camera_perspective::set_center)
+  .def_property("covariance", &kv::simple_camera_perspective::get_center_covar,
+                              &kv::simple_camera_perspective::set_center_covar)
+  .def_property("translation", &kv::simple_camera_perspective::translation,
+                               &kv::simple_camera_perspective::set_translation)
+  .def_property("rotation", &kv::simple_camera_perspective::get_rotation,
+                            &kv::simple_camera_perspective::set_rotation)
   .def("__eq__", &camera_eq,
     py::arg("other"))
   .def("__ne__", &camera_ne,
