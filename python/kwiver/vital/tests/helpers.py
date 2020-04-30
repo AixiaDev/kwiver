@@ -49,7 +49,7 @@ from kwiver.vital.types import (
     GeoPolygon,
     Landmark,
     Polygon,
-    Rotation,
+    RotationD,
     Track,
     track_descriptor,
     TrackSet,
@@ -73,7 +73,7 @@ def camera_seq(num_cams=20, k=None):
     if k is None:
         k = CameraIntrinsics(1000, [640, 480])
     d = {}
-    r = Rotation()  # identity
+    r = RotationD()  # identity
     for i in range(num_cams):
         frac = float(i) / num_cams
         x = 4 * math.cos(2*frac)
@@ -95,7 +95,7 @@ def init_cameras(num_cams=20, intrinsics=None):
     """
     if intrinsics is None:
         intrinsics = CameraIntrinsics(1000, (640, 480))
-    r = Rotation()
+    r = RotationD()
     c = np.array([0, 0, 1])
     d = {}
     for i in range(num_cams):
@@ -117,7 +117,7 @@ def noisy_cameras(cam_map, pos_stddev=1., rot_stddev=1.):
     for f, c in cam_map.as_dict().iteritems():
         c2 = Camera(
             c.center + random_point_3d(pos_stddev),
-            c.rotation * Rotation.from_rodrigues(random_point_3d(rot_stddev)),
+            c.rotation * RotationD(random_point_3d(rot_stddev)),
             c.intrinsics
         )
         cmap[f] = c2
