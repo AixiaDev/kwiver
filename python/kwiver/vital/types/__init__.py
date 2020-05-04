@@ -15,6 +15,7 @@ from kwiver.vital.types.descriptor_set import *
 from kwiver.vital.types.detected_object_type import *
 from kwiver.vital.types.detected_object import *
 from kwiver.vital.types.detected_object_set import *
+from kwiver.vital.types.essential_matrix import *
 from kwiver.vital.types.feature import *
 from kwiver.vital.types.feature_set import *
 from kwiver.vital.types.fundamental_matrix import *
