@@ -225,6 +225,13 @@ target_link_libraries(python-vital.types-local_cartesian
   PUBLIC ${PYTHON_LIBRARIES}
          vital)
 
+kwiver_add_python_library(metadata_tags
+  vital/types
+  metadata_tags.cxx)
+target_link_libraries(python-vital.types-metadata_tags
+  PUBLIC ${PYTHON_LIBRARIES}
+         vital)
+
 kwiver_add_python_library(point
   vital/types
   point.cxx)
@@ -345,6 +352,7 @@ if(NOT SKBUILD)
     iqr_feedback
     landmark
     local_cartesian
+    metadata_tags
     point
     polygon
     query_result

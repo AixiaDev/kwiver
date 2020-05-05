@@ -30,6 +30,7 @@ set(__testable_modnames
   test_iqr_feedback
   test_landmark
   test_local_cartesian
+  test_metadata_tags
   test_object_track_state
   test_object_track_set
   test_query_result

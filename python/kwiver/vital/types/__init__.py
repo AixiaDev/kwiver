@@ -29,6 +29,7 @@ from kwiver.vital.types.homography_f2w import *
 from kwiver.vital.types.iqr_feedback import *
 from kwiver.vital.types.landmark import *
 from kwiver.vital.types.local_cartesian import *
+from kwiver.vital.types.metadata_tags import *
 from kwiver.vital.types.object_track_set import *
 from kwiver.vital.types.point import *
 from kwiver.vital.types.polygon import *
